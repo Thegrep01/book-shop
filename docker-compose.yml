@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  server:
+    container_name: shop
+    build: docker/server
+    ports:
+      - 8090:8090
+      - 9229:9229
+    volumes:
+      - ./:/var/www/shop
+    environment:
+      - COMPOSE_HTTP_TIMEOUT=300
+      - "TZ=Asia/Almaty"
+    tty: true
+    
+    depends_on:
+      - mongodb
+    networks:
+      - shop-network
+
+  mongodb:
+    image: mongo:latest
+    container_name: shop-mongodb
+    ports:
+      - 27017:27017
+    environment:
+      - "TZ=Asia/Almaty"
+    networks:
+      - shop-network
+networks:
+  shop-network:
+   external: true
