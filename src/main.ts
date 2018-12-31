@@ -1,8 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { INestApplication, INestExpressApplication } from '@nestjs/common';
+
+const PORT: number = 8090;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  const app: INestApplication & INestExpressApplication = await NestFactory.create(AppModule);
+  app.enableCors();
+  await app.listen(PORT);
 }
 bootstrap();
