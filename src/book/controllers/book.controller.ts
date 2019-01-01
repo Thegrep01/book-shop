@@ -43,12 +43,12 @@ export class BookController {
 
     @Get('search')
     public async getBookByName(
-        @Query() param: { name?: string, author?: string, genres?: string[], bookbider: string },
+        @Query() param: { name?: string, author?: string, price?:string, genres?: string[], bookbider: string },
         @Res() res: Response,
     ): Promise<Response> {
         try {
-            const { name, author, genres, bookbider } = param;
-            const books = await this.bookService.getByParams(name, author, genres, bookbider);
+            const { name, author, price, genres, bookbider } = param;
+            const books = await this.bookService.getByParams(name, author, price, genres, bookbider);
             return res.status(HttpStatus.OK).json({ data: books });
         } catch (err) {
             return res.status(HttpStatus.BAD_REQUEST)

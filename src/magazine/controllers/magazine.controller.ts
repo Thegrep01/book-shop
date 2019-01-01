@@ -1,21 +1,22 @@
-import { ComixDto } from './../dtos/comix.dto';
+import { MagazineDto } from './../dtos/magazine.dto';
 import { Controller, Post, Body, Res, HttpStatus, Get, Query } from '@nestjs/common';
-import { ComixService } from '../services/comix.service';
+import { MagazineService } from '../services/magazine.service';
 import { Response } from 'express-serve-static-core';
-import { IComix } from '../schemas/comix.schema';
+import { IMagazine } from '../schemas/magazine.schema';
 
-@Controller('comix')
-export class ComixController {
-    constructor(private comixService: ComixService){}
+@Controller('magazine')
+export class MagazineController 
+{
+    constructor(private magazineService: MagazineService) { }
 
     @Post('new')
-    public async newComix(
-        @Body() comixDto: ComixDto,
+    public async newMagazine(
+        @Body() magazineDto: MagazineDto,
         @Res() res: Response,
     ): Promise<Response> {
         try {
-            const comix: IComix = await this.comixService.createComix(comixDto);
-            return res.status(HttpStatus.OK).json({ data: comix });
+            const magazine: IMagazine = await this.magazineService.createMagazine(magazineDto);
+            return res.status(HttpStatus.OK).json({ data: magazine });
         } catch (err) {
             return res.status(HttpStatus.BAD_REQUEST)
                 .json({
@@ -26,11 +27,11 @@ export class ComixController {
     }
 
     @Get('all')
-    public async getComix(
+    public async getMagazine(
         @Res() res: Response,
     ): Promise<Response> {
         try {
-            const posts = await this.comixService.getComixes();
+            const posts = await this.magazineService.getMagazines();
             return res.status(HttpStatus.OK).json({ data: posts });
         } catch (error) {
             return res.status(HttpStatus.BAD_REQUEST)
@@ -42,14 +43,14 @@ export class ComixController {
     }
 
     @Get('search')
-    public async getComixByName(
-        @Query() param: { name?: string, author?: string, painter?:string, price?:string, genres?: string[], bookbider: string , side:string},
+    public async getMagazineByName(
+        @Query() param: { name?: string, price?: string, date?: string, category?: string[] },
         @Res() res: Response,
     ): Promise<Response> {
         try {
-            const { name, author, painter, price, genres, bookbider, side} = param;
-            const comixes = await this.comixService.getByParams(name, author, painter, price, genres, bookbider, side);
-            return res.status(HttpStatus.OK).json({ data: comixes });
+            const { name, price, date, category} = param;
+            const magazine = await this.magazineService.getByParams(name, price, date, category);
+            return res.status(HttpStatus.OK).json({ data: magazine });
         } catch (err) {
             return res.status(HttpStatus.BAD_REQUEST)
                 .json({
