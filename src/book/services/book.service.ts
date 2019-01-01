@@ -18,6 +18,10 @@ export class BookService {
         return await this.bookModel.find().lean().exec();
     }
 
+    public async getBook(id: string): Promise<IBook[]> {
+        return await this.bookModel.findOne({_id: id}).lean().exec();
+    }
+
     public async getByParams(
         name: string | undefined, author: string | undefined,
         price: string| undefined,
@@ -41,6 +45,7 @@ export class BookService {
         if (genres) {
             query = { ...query, genres };
         }
+
         const getBooks = await this.bookModel.find(query).lean().exec();
         return getBooks;
     }
