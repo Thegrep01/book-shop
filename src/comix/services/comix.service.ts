@@ -20,11 +20,12 @@ export class ComixService {
 
     public async getByParams(
         name: string | undefined, author: string | undefined,
-        painter: string | undefined, genres: string[] | undefined,
+        painter: string | undefined,
+        price: string| undefined, genres: string[] | undefined,
         bookbider: string, side: string
     ): Promise<IComix[]> {
 
-        let query: any = { bookbider };
+        let query: any = { bookbider , side};
 
         if (name) {
             query = { ...query, name };
@@ -36,6 +37,10 @@ export class ComixService {
 
         if (painter) {
             query = { ...query, painter };
+        }
+
+        if (price) {
+            query = { ...query, price };
         }
 
         if (genres) {
