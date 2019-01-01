@@ -20,6 +20,7 @@ export class BookService {
 
     public async getByParams(
         name: string | undefined, author: string | undefined,
+        price: string| undefined,
         genres: string[] | undefined, bookbider: string,
     ): Promise<IBook[]> {
 
@@ -31,6 +32,10 @@ export class BookService {
 
         if (author) {
             query = { ...query, author };
+        }
+
+        if (price) {
+            query = { ...query, price };
         }
 
         if (genres) {
