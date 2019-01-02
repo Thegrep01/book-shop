@@ -4,7 +4,7 @@ import { BookService } from '../services/book.service';
 import { Response } from 'express-serve-static-core';
 import { IBook } from '../schemas/book.schema';
 
-@Controller('book')
+@Controller('books')
 export class BookController {
     constructor(private bookService: BookService) { }
 
@@ -40,7 +40,7 @@ export class BookController {
                 });
         }
     }
-    @Get('/:id')
+    @Get('book/:id')
     public async getBook(
         @Res() res: Response,
         @Param('id') id: string,
@@ -59,7 +59,7 @@ export class BookController {
 
     @Get('search')
     public async getBookByName(
-        @Query() param: { name?: string, author?: string, price?:string, genres?: string[], bookbider: string },
+        @Query() param: { name?: string, author?: string, price?: string, genres?: string[], bookbider: string },
         @Res() res: Response,
     ): Promise<Response> {
         try {

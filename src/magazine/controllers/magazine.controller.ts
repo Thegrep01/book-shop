@@ -1,12 +1,11 @@
 import { MagazineDto } from './../dtos/magazine.dto';
-import { Controller, Post, Body, Res, HttpStatus, Get, Query } from '@nestjs/common';
+import { Controller, Post, Body, Res, HttpStatus, Get, Query, Param } from '@nestjs/common';
 import { MagazineService } from '../services/magazine.service';
 import { Response } from 'express-serve-static-core';
 import { IMagazine } from '../schemas/magazine.schema';
 
-@Controller('magazine')
-export class MagazineController 
-{
+@Controller('magazines')
+export class MagazineController {
     constructor(private magazineService: MagazineService) { }
 
     @Post('new')
@@ -33,6 +32,23 @@ export class MagazineController
         try {
             const posts = await this.magazineService.getMagazines();
             return res.status(HttpStatus.OK).json({ data: posts });
+        } catch (error) {
+            return res.status(HttpStatus.BAD_REQUEST)
+                .json({
+                    data: null,
+                    error: error.message,
+                });
+        }
+    }
+
+    @Get('magazine/:id')
+    public async getBook(
+        @Res() res: Response,
+        @Param('id') id: string,
+    ): Promise<Response> {
+        try {
+            const book = await this.magazineService.getMagazine(id);
+            return res.status(HttpStatus.OK).json({ data: book });
         } catch (error) {
             return res.status(HttpStatus.BAD_REQUEST)
                 .json({
