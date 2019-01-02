@@ -4,8 +4,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Model } from 'mongoose';
 
 @Injectable()
-export class MagazineService
-{
+export class MagazineService {
     constructor(
         @Inject('MagazineModelToken')
         private readonly magazineModel: Model<IMagazine>,
@@ -17,6 +16,10 @@ export class MagazineService
 
     public async getMagazines(): Promise<IMagazine[]> {
         return await this.magazineModel.find().lean().exec();
+    }
+
+    public async getMagazine(id: string): Promise<IMagazine> {
+        return await this.magazineModel.findOne({_id: id}).lean().exec();
     }
 
     public async getByParams(

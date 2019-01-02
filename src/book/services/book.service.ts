@@ -18,7 +18,7 @@ export class BookService {
         return await this.bookModel.find().lean().exec();
     }
 
-    public async getBook(id: string): Promise<IBook[]> {
+    public async getBook(id: string): Promise<IBook> {
         return await this.bookModel.findOne({_id: id}).lean().exec();
     }
 

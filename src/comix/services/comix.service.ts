@@ -14,15 +14,19 @@ export class ComixService {
         return await this.comixModel.create(post);
     }
 
-    public async getComixes(): Promise<IComix[]> {
+    public async getCommixes(): Promise<IComix[]> {
         return await this.comixModel.find().lean().exec();
+    }
+
+    public async getComix(id: string): Promise<IComix> {
+        return await this.comixModel.findOne({_id: id}).lean().exec();
     }
 
     public async getByParams(
         name: string | undefined, author: string | undefined,
         painter: string | undefined,
         price: string| undefined, genres: string[] | undefined,
-        bookbider: string, side: string
+        bookbider: string, side: string,
     ): Promise<IComix[]> {
 
         let query: any = { bookbider , side};
