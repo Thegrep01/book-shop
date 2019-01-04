@@ -2,6 +2,10 @@ import { ComixDto } from './../dtos/comix.dto';
 import { IComix } from './../schemas/comix.schema';
 import { Injectable, Inject } from '@nestjs/common';
 import { Model } from 'mongoose';
+import * as util from 'util';
+import * as fs from 'fs';
+
+const unlinkAsync: any = util.promisify(fs.unlink);
 
 @Injectable()
 export class ComixService {
@@ -12,6 +16,25 @@ export class ComixService {
 
     public async createComix(post: ComixDto): Promise<IComix> {
         return await this.comixModel.create(post);
+    }
+
+    public async createUrl(comix: ComixDto, file: any): Promise<ComixDto> {
+        if (comix.url) {
+            const numbers: number = comix.url.lastIndexOf('/');
+            const fileToRemove: string = comix.url.slice(numbers);
+            await unlinkAsync(`files/comics${fileToRemove}`);
+        }
+        if (!file) {
+            return comix;
+        }
+        const rstream: fs.ReadStream = fs.createReadStream(file.path);
+        const wstream: fs.WriteStream = fs.createWriteStream(
+            `files/comics/${file.originalname}`,
+        );
+        rstream.pipe(wstream);
+        await unlinkAsync(file.path);
+        comix.url = `store/comics/${file.originalname}`;
+        return comix;
     }
 
     public async getCommixes(): Promise<IComix[]> {
@@ -26,10 +49,10 @@ export class ComixService {
         name: string | undefined, author: string | undefined,
         painter: string | undefined,
         price: string| undefined, genres: string[] | undefined,
-        bookbider: string, side: string,
+        comixbider: string, side: string,
     ): Promise<IComix[]> {
 
-        let query: any = { bookbider , side};
+        let query: any = { comixbider , side};
 
         if (name) {
             query = { ...query, name };

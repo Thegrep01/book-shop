@@ -7,6 +7,8 @@ export const BookSchema = new mongoose.Schema({
     price: Number,
     genres: [],
     bookbider: String,
+    url: String,
+
 });
 
 export interface IBook extends Document  {
@@ -15,4 +17,5 @@ export interface IBook extends Document  {
     price: number;
     genres: string[];
     bookbider: string;
+    url: string;
 }

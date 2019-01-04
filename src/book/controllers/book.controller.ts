@@ -1,5 +1,5 @@
 import { BookDto } from './../dtos/book.dto';
-import { Controller, Post, Body, Res, HttpStatus, Get, Query, Param } from '@nestjs/common';
+import { Controller, Post, Body, Res, HttpStatus, Get, Query, Param, UseInterceptors, FileInterceptor, UploadedFile } from '@nestjs/common';
 import { BookService } from '../services/book.service';
 import { Response } from 'express-serve-static-core';
 import { IBook } from '../schemas/book.schema';
@@ -9,12 +9,24 @@ export class BookController {
     constructor(private bookService: BookService) { }
 
     @Post('new')
+    @UseInterceptors(FileInterceptor('file', { dest: `files/books/` }))
     public async newBook(
-        @Body() bookDto: BookDto,
+        @Body() data: { book: string },
         @Res() res: Response,
+        @UploadedFile() file,
     ): Promise<Response> {
         try {
-            const book: IBook = await this.bookService.createBook(bookDto);
+            const bookDto = JSON.parse(data.book);
+            let newBook: BookDto | null = null;
+            let book: IBook;
+            if (file) {
+                newBook = await this.bookService.createUrl(bookDto, file);
+            }
+            if (newBook) {
+                book = await this.bookService.createBook(newBook);
+            } else {
+                book = await this.bookService.createBook(bookDto);
+            }
             return res.status(HttpStatus.OK).json({ data: book });
         } catch (err) {
             return res.status(HttpStatus.BAD_REQUEST)

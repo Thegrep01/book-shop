@@ -9,14 +9,16 @@ export const ComixSchema = new mongoose.Schema({
     genres: [],
     bookbider: String,
     side: String,
+    url: String,
 });
 
 export interface IComix extends Document  {
-    name: String;
-    author: String;
-    painter: String;
-    price: Number;
+    name: string;
+    author: string;
+    painter: string;
+    price: number;
     genres: [];
-    bookbider: String;
-    side: String;
+    bookbider: string;
+    side: string;
+    url: string;
 }

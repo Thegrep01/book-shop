@@ -6,4 +6,5 @@ export class ComixDto {
     readonly genres: string[];
     readonly bookbider: string;
     readonly side: string;
+    url: string;
 }

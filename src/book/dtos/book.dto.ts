@@ -4,4 +4,5 @@ export class BookDto {
     readonly price: number;
     readonly genres: string[];
     readonly bookbider: string;
+    url: string;
 }
