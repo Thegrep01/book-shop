@@ -3,7 +3,7 @@ import { ComixController } from './comix.controller';
 
 describe('Comix Controller', () => {
   let module: TestingModule;
-  
+
   beforeAll(async () => {
     module = await Test.createTestingModule({
       controllers: [ComixController],
