@@ -27,7 +27,7 @@ export class AuthService {
         return user;
     }
 
-    public async signupWithEmail(
+    public async signUpWithEmail(
         createUserDto: UserDto,
         res: Response,
     ): Promise<IUser | Response> {
