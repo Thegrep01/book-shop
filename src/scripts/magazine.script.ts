@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
-import { BookSchema } from '../book/schemas/book.schema';
+import { MagazineSchema } from '../magazine/schemas/magazine.schema';
+import { getEnabledCategories } from 'trace_events';
 
 
 main();
@@ -13,12 +14,12 @@ async function main(): Promise<void> {
     };
     await mongoose.connect(host, { config });
     try {
-        db.model('books', BookSchema);
-        const BookModel: mongoose.Model<mongoose.Document> = mongoose.model('books');
-        await BookModel.remove({});
+        db.model('magazines', MagazineSchema);
+        const MagazineModel: mongoose.Model<mongoose.Document> = mongoose.model('magazines');
+        await MagazineModel.remove({});
         for (let i = 0; i < 100; i++) {
-            const book = genBook();
-            await BookModel.create(book);
+            const magazine = genMagazine();
+            await MagazineModel.create(magazine);
         }
     } catch (error) {
         console.error(error);
@@ -26,16 +27,15 @@ async function main(): Promise<void> {
     mongoose.connection.close();
 }
 
-function genBook() {
-    const book = {
+function genMagazine() {
+    const magazine = {
         name: genName(),
-        authour: genAuthour(),
-        genres: genGenre(),
         price: Math.floor(Math.random() * 100) + 1,
-        bookbider: (Math.floor(Math.random() * 10) + 1) % 2 === 0 ? 'hardcover' : 'softcover',
+        date: genDate(),
+        category: genCategory(),
         url: 'store/books/cover.jpg',
     }
-    return book;
+    return magazine;
 }
 
 function genName() {
@@ -49,7 +49,7 @@ function genName() {
 
 }
 
-function genGenre() {
+function genCategory() {
     const possible = ['history', 'since fiction', 'drama', 'action', 'adventure', 'romance', 'mystery', 'horror', 'novel'];
     let genres = [];
     const c = (Math.floor(Math.random() * possible.length));
@@ -62,14 +62,8 @@ function genGenre() {
     return genres;
 }
 
-function genAuthour() {
-    const possible = ['William Shakespeare', 'Ray Bradbury', 'Jack London', 'Mark Twen', 'Oskar Wilde'];
-    let auth = [];
-    const c = (Math.floor(Math.random() * possible.length));
-    for (let i = 0; i <= c; i++) {
-        let k = (Math.floor(Math.random() * possible.length));
-        if (!auth.toString().includes(possible[k]))
-            auth.push(possible[k]);
-    }
-    return auth;
+function genDate() {
+    const monthes = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    let text: string = `${(Math.floor(Math.random() * (31 - 1) + 1)).toString()} ${monthes[Math.floor(Math.random() * monthes.length)]} ${(Math.floor(Math.random() * (2019 - 1990) + 1990)).toString()}`;
+    return text;
 }

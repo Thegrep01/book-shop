@@ -6,6 +6,7 @@ export const MagazineSchema = new mongoose.Schema({
     price: Number,
     date: String,
     category: [],
+    url: String,
 });
 
 export interface IMagazine extends Document  {
@@ -13,4 +14,5 @@ export interface IMagazine extends Document  {
     price: number;
     date: string;
     category: string[];
+    url: string,
 }

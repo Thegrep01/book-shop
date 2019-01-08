@@ -19,7 +19,7 @@ export class MagazineService {
     }
 
     public async getMagazine(id: string): Promise<IMagazine> {
-        return await this.magazineModel.findOne({_id: id}).lean().exec();
+        return await this.magazineModel.findOne({ _id: id }).lean().exec();
     }
 
     public async getByParams(
@@ -45,6 +45,12 @@ export class MagazineService {
             query = { ...query, category };
         }
         const getMagazines = await this.magazineModel.find(query).lean().exec();
+        return getMagazines;
+    }
+
+    public async getMagazinesDates(): Promise<IMagazine[]> {
+        const getMagazines = await this.magazineModel.distinct('date').lean().exec();
+        // console.log(new Date(getMagazines[0]));
         return getMagazines;
     }
 }

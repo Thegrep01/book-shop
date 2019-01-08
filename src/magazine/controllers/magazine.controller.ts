@@ -75,4 +75,19 @@ export class MagazineController {
                 });
         }
     }
+    @Get('date')
+    public async getMagazineDates(
+        @Res() res: Response,
+    ): Promise<Response> {
+        try {
+            const book = await this.magazineService.getMagazinesDates();
+            return res.status(HttpStatus.OK).json({ data: book });
+        } catch (error) {
+            return res.status(HttpStatus.BAD_REQUEST)
+                .json({
+                    data: null,
+                    error: error.message,
+                });
+        }
+    }
 }

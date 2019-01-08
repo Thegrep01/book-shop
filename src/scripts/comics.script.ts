@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { BookSchema } from '../book/schemas/book.schema';
+import { ComixSchema } from '../comix/schemas/comix.schema';
 
 
 main();
@@ -13,12 +13,12 @@ async function main(): Promise<void> {
     };
     await mongoose.connect(host, { config });
     try {
-        db.model('books', BookSchema);
-        const BookModel: mongoose.Model<mongoose.Document> = mongoose.model('books');
-        await BookModel.remove({});
+        db.model('comix', ComixSchema);
+        const ComixModel: mongoose.Model<mongoose.Document> = mongoose.model('comix');
+        await ComixModel.remove({});
         for (let i = 0; i < 100; i++) {
-            const book = genBook();
-            await BookModel.create(book);
+            const comix = genComix();
+            await ComixModel.create(comix);
         }
     } catch (error) {
         console.error(error);
@@ -26,16 +26,18 @@ async function main(): Promise<void> {
     mongoose.connection.close();
 }
 
-function genBook() {
-    const book = {
+function genComix() {
+    const comix = {
         name: genName(),
         authour: genAuthour(),
+        painter: genPainter(),
         genres: genGenre(),
         price: Math.floor(Math.random() * 100) + 1,
         bookbider: (Math.floor(Math.random() * 10) + 1) % 2 === 0 ? 'hardcover' : 'softcover',
+        side: (Math.floor(Math.random() * 10) + 1) % 2 === 0 ? 'left-side' : 'right-side',
         url: 'store/books/cover.jpg',
     }
-    return book;
+    return comix;
 }
 
 function genName() {
@@ -50,7 +52,7 @@ function genName() {
 }
 
 function genGenre() {
-    const possible = ['history', 'since fiction', 'drama', 'action', 'adventure', 'romance', 'mystery', 'horror', 'novel'];
+    const possible = ['history', 'since_fiction', 'drama', 'action', 'adventure', 'romance', 'mystery', 'horror', 'novel'];
     let genres = [];
     const c = (Math.floor(Math.random() * possible.length));
     for (let i = 0; i <= c; i++) {
@@ -63,7 +65,7 @@ function genGenre() {
 }
 
 function genAuthour() {
-    const possible = ['William Shakespeare', 'Ray Bradbury', 'Jack London', 'Mark Twen', 'Oskar Wilde'];
+    const possible = ['authour 1', 'authour 2', 'authour 3', 'authour 4', 'authour 5'];
     let auth = [];
     const c = (Math.floor(Math.random() * possible.length));
     for (let i = 0; i <= c; i++) {
@@ -72,4 +74,16 @@ function genAuthour() {
             auth.push(possible[k]);
     }
     return auth;
+}
+
+function genPainter() {
+    const possible = ['painter 1', 'painter 2', 'painter 3', 'painter 4', 'painter 5'];
+    let painter = [];
+    const c = (Math.floor(Math.random() * possible.length));
+    for (let i = 0; i <= c; i++) {
+        let k = (Math.floor(Math.random() * possible.length));
+        if (!painter.toString().includes(possible[k]))
+        painter.push(possible[k]);
+    }
+    return painter;
 }
