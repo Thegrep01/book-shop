@@ -5,7 +5,7 @@ export const BookSchema = new mongoose.Schema({
     name: String,
     author: String,
     price: Number,
-    genres: [],
+    genres: [String],
     bookbider: String,
     url: String,
 
